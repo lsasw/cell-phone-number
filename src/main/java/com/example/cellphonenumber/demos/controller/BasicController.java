@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.example.cellphonenumber.demos.web;
+package com.example.cellphonenumber.demos.controller;
 
+import com.example.cellphonenumber.demos.mapper.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;

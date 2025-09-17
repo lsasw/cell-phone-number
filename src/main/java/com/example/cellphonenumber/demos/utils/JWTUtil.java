@@ -1,4 +1,4 @@
-package com.example.cellphonenumber.demos.web;
+package com.example.cellphonenumber.demos.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

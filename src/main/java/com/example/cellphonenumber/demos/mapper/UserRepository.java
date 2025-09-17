@@ -1,4 +1,4 @@
-package com.example.cellphonenumber.demos.web;
+package com.example.cellphonenumber.demos.mapper;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

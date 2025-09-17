@@ -1,4 +1,4 @@
-package com.example.cellphonenumber.demos.web;
+package com.example.cellphonenumber.demos.mapper;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

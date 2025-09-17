@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.cellphonenumber.demos.web;
+package com.example.cellphonenumber.demos.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

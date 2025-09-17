@@ -1,4 +1,4 @@
-package com.example.cellphonenumber.demos.web;
+package com.example.cellphonenumber.demos.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

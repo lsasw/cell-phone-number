@@ -1,4 +1,4 @@
-package com.example.cellphonenumber.demos.web;
+package com.example.cellphonenumber.demos.service;
 
 import org.springframework.stereotype.Service;
 
