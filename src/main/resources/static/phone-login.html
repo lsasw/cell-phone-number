@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手机号登录/注册</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .user-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+        .note {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>手机号登录/注册</h2>
+        
+        <div id="loginForm">
+            <div class="form-group">
+                <label for="phone">手机号:</label>
+                <input type="text" id="phone" placeholder="请输入11位手机号">
+                <div class="note">请输入真实的手机号码，验证码将打印在应用控制台中</div>
+            </div>
+            
+            <div class="form-group">
+                <button id="sendCodeBtn" onclick="sendCode()">发送验证码</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="code">验证码:</label>
+                <input type="text" id="code" placeholder="请输入6位验证码">
+            </div>
+            
+            <div class="form-group">
+                <button onclick="login()">登录/注册</button>
+            </div>
+        </div>
+        
+        <div id="message" class="message hidden"></div>
+        
+        <div id="userInfo" class="user-info hidden">
+            <h3>用户信息</h3>
+            <p>用户ID: <span id="userId"></span></p>
+            <p>用户名: <span id="userName"></span></p>
+            <p>手机号: <span id="userPhone"></span></p>
+            <p>年龄: <span id="userAge"></span></p>
+            <p>注册时间: <span id="userCreatedAt"></span></p>
+            <button onclick="logout()">退出登录</button>
+        </div>
+    </div>
+
+    <script>
+        // 显示消息
+        function showMessage(text, isSuccess) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = 'message ' + (isSuccess ? 'success' : 'error');
+            messageDiv.innerText = text;
+            messageDiv.classList.remove('hidden');
+            
+            // 3秒后自动隐藏消息
+            setTimeout(() => {
+                messageDiv.classList.add('hidden');
+            }, 3000);
+        }
+
+        // 发送验证码
+        function sendCode() {
+            const phone = document.getElementById('phone').value;
+            
+            if (!phone || phone.length !== 11 || !/^1[3-9]\d{9}$/.test(phone)) {
+                showMessage('请输入正确的11位手机号', false);
+                return;
+            }
+            
+            // 禁用按钮并显示倒计时
+            const sendBtn = document.getElementById('sendCodeBtn');
+            sendBtn.disabled = true;
+            let countdown = 60;
+            sendBtn.innerText = `${countdown}秒后重发`;
+            
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                sendBtn.innerText = `${countdown}秒后重发`;
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    sendBtn.disabled = false;
+                    sendBtn.innerText = '发送验证码';
+                }
+            }, 1000);
+            
+            // 发送请求
+            fetch('/api/auth/send-code?phone=' + phone, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(data.message, true);
+                } else {
+                    showMessage(data.message, false);
+                    // 如果发送失败，立即恢复按钮
+                    clearInterval(countdownInterval);
+                    sendBtn.disabled = false;
+                    sendBtn.innerText = '发送验证码';
+                }
+            })
+            .catch(error => {
+                showMessage('请求失败: ' + error, false);
+                // 如果发送失败，立即恢复按钮
+                clearInterval(countdownInterval);
+                sendBtn.disabled = false;
+                sendBtn.innerText = '发送验证码';
+            });
+        }
+
+        // 登录/注册
+        function login() {
+            const phone = document.getElementById('phone').value;
+            const code = document.getElementById('code').value;
+            
+            if (!phone || phone.length !== 11 || !/^1[3-9]\d{9}$/.test(phone)) {
+                showMessage('请输入正确的11位手机号', false);
+                return;
+            }
+            
+            if (!code || code.length !== 6) {
+                showMessage('请输入6位验证码', false);
+                return;
+            }
+            
+            fetch('/api/auth/login?phone=' + phone + '&code=' + code, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(data.message, true);
+                    // 保存token到localStorage
+                    localStorage.setItem('token', data.token);
+                    // 显示用户信息
+                    showUserInfo(data.user);
+                } else {
+                    showMessage(data.message, false);
+                }
+            })
+            .catch(error => {
+                showMessage('请求失败: ' + error, false);
+            });
+        }
+
+        // 显示用户信息
+        function showUserInfo(user) {
+            document.getElementById('userId').innerText = user.id || 'N/A';
+            document.getElementById('userName').innerText = user.name || 'N/A';
+            document.getElementById('userPhone').innerText = user.phone || 'N/A';
+            document.getElementById('userAge').innerText = user.age || 'N/A';
+            
+            // 格式化时间显示
+            if (user.createdAt) {
+                const date = new Date(user.createdAt);
+                document.getElementById('userCreatedAt').innerText = date.toLocaleString();
+            } else {
+                document.getElementById('userCreatedAt').innerText = 'N/A';
+            }
+            
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('userInfo').classList.remove('hidden');
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('token');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('userInfo').classList.add('hidden');
+            document.getElementById('code').value = '';
+        }
+
+        // 页面加载时检查是否有保存的token
+        window.onload = function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                // 这里可以调用后端接口验证token并获取用户信息
+                // 简化处理，直接显示登录表单隐藏状态
+                document.getElementById('loginForm').classList.add('hidden');
+                // 实际项目中应该从后端获取用户信息
+                showMessage('已登录，刷新页面以重新登录', true);
+            }
+        }
+    </script>
+</body>
+</html>
