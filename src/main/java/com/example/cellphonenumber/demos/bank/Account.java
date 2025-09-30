@@ -2,6 +2,7 @@ package com.example.cellphonenumber.demos.bank;
 
 public class Account {
     private final String id; // 账户ID（唯一标识）
+    // 账户余额
     private double balance;
 
     public Account(String id, double balance) {

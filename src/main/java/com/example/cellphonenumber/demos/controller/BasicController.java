@@ -16,7 +16,7 @@
 
 package com.example.cellphonenumber.demos.controller;
 
-import com.example.cellphonenumber.demos.mapper.User;
+import com.example.cellphonenumber.demos.mapper.UserA;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,17 +39,17 @@ public class BasicController {
     // http://127.0.0.1:8080/user
     @RequestMapping("/user")
     @ResponseBody
-    public User user() {
-        User user = new User();
-        user.setName("theonefx");
-        user.setAge(666);
-        return user;
+    public UserA user() {
+        UserA userA = new UserA();
+        userA.setName("theonefx");
+        userA.setAge(666);
+        return userA;
     }
 
     // http://127.0.0.1:8080/save_user?name=newName&age=11
     @RequestMapping("/save_user")
     @ResponseBody
-    public String saveUser(User u) {
+    public String saveUser(UserA u) {
         return "user will save: name=" + u.getName() + ", age=" + u.getAge();
     }
 
@@ -61,8 +61,8 @@ public class BasicController {
 
     @ModelAttribute
     public void parseUser(@RequestParam(name = "name", defaultValue = "unknown user") String name
-            , @RequestParam(name = "age", defaultValue = "12") Integer age, User user) {
-        user.setName("zhangsan");
-        user.setAge(18);
+            , @RequestParam(name = "age", defaultValue = "12") Integer age, UserA userA) {
+        userA.setName("zhangsan");
+        userA.setAge(18);
     }
 }

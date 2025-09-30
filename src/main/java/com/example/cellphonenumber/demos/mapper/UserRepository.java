@@ -6,13 +6,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<UserA, Long> {
     /**
      * 根据手机号查找用户
      * @param phone 手机号
      * @return 用户对象
      */
-    Optional<User> findByPhone(String phone);
+    Optional<UserA> findByPhone(String phone);
     
     /**
      * 检查手机号是否存在

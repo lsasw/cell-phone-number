@@ -74,7 +74,7 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        .user-info {
+        .userA-info {
             margin-top: 20px;
             padding: 15px;
             background-color: #e9ecef;
@@ -117,7 +117,7 @@
         
         <div id="message" class="message hidden"></div>
         
-        <div id="userInfo" class="user-info hidden">
+        <div id="userInfo" class="userA-info hidden">
             <h3>用户信息</h3>
             <p>用户ID: <span id="userId"></span></p>
             <p>用户名: <span id="userName"></span></p>
@@ -217,7 +217,7 @@
                     // 保存token到localStorage
                     localStorage.setItem('token', data.token);
                     // 显示用户信息
-                    showUserInfo(data.user);
+                    showUserInfo(data.userA);
                 } else {
                     showMessage(data.message, false);
                 }
@@ -228,15 +228,15 @@
         }
 
         // 显示用户信息
-        function showUserInfo(user) {
-            document.getElementById('userId').innerText = user.id || 'N/A';
-            document.getElementById('userName').innerText = user.name || 'N/A';
-            document.getElementById('userPhone').innerText = user.phone || 'N/A';
-            document.getElementById('userAge').innerText = user.age || 'N/A';
+        function showUserInfo(userA) {
+            document.getElementById('userId').innerText = userA.id || 'N/A';
+            document.getElementById('userName').innerText = userA.name || 'N/A';
+            document.getElementById('userPhone').innerText = userA.phone || 'N/A';
+            document.getElementById('userAge').innerText = userA.age || 'N/A';
             
             // 格式化时间显示
-            if (user.createdAt) {
-                const date = new Date(user.createdAt);
+            if (userA.createdAt) {
+                const date = new Date(userA.createdAt);
                 document.getElementById('userCreatedAt').innerText = date.toLocaleString();
             } else {
                 document.getElementById('userCreatedAt').innerText = 'N/A';

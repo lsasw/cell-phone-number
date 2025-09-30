@@ -1,0 +1,18 @@
+spring:
+  rabbitmq:
+    host: 10.10.16.8
+    port: 5672
+    username: rabbitmq
+    password: nGZnTA8frpMYCf23
+    listener:
+      simple:
+        acknowledge-mode: manual # 或 auto # 开启手动ACK,为了保证消息的可靠消费，建议使用手动确认模式，而不是默认的自动确认
+#spring:
+#  rabbitmq:
+#    template:
+#      retry:
+#        enabled: true
+#        initial-interval: 1000
+#        max-interval: 10000
+#        multiplier: 2
+#        max-attempts: 5

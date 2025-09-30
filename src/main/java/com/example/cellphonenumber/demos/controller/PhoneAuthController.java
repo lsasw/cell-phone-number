@@ -1,6 +1,6 @@
 package com.example.cellphonenumber.demos.controller;
 
-import com.example.cellphonenumber.demos.mapper.User;
+import com.example.cellphonenumber.demos.mapper.UserA;
 import com.example.cellphonenumber.demos.service.SmsService;
 import com.example.cellphonenumber.demos.service.UserService;
 import com.example.cellphonenumber.demos.service.VerificationCodeService;
@@ -105,16 +105,16 @@ public class PhoneAuthController {
 
         try {
             // 查找用户
-            User user = userService.findByPhone(phone);
+            UserA userA = userService.findByPhone(phone);
             boolean isRegister = false;
 
             // 如果用户不存在则创建新用户
-            if (user == null) {
-                user = new User();
-                user.setPhone(phone);
-                user.setName("用户" + phone.substring(7)); // 简单设置用户名
-                user.setAge(18);
-                user = userService.save(user);
+            if (userA == null) {
+                userA = new UserA();
+                userA.setPhone(phone);
+                userA.setName("用户" + phone.substring(7)); // 简单设置用户名
+                userA.setAge(18);
+                userA = userService.save(userA);
                 isRegister = true;
                 logger.info("New user registered with phone: {}", phone);
                 result.put("message", "注册成功");
@@ -128,7 +128,7 @@ public class PhoneAuthController {
 
             result.put("success", true);
             result.put("token", token);
-            result.put("user", user);
+            result.put("user", userA);
             result.put("isRegister", isRegister);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
